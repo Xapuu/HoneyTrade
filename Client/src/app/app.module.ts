@@ -23,6 +23,8 @@ import { NotificationService } from './services/notification.service';
 import { AutorizationService } from './services/auth.service';
 import { HeaderService } from './services/heeader.service';
 import { SocketService } from './services/socket.service';
+import { MessageService } from './services/message.service';
+
 
 
 
@@ -49,6 +51,7 @@ import { AuthenticationModule } from './components/auth/auth.module';
     NotificationService,
     CookieService,
     HeaderService,
+    MessageService,
     AutorizationService,
     SocketService,
     // {

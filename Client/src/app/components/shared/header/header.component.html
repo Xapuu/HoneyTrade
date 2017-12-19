@@ -39,19 +39,17 @@
 
 
       <li *ngIf="loggedIn "  class="nav-item">
-        <a class="nav-link" routerLinkActive="true" routerLink="notifications">Notifications</a>
+        <a class="nav-link" routerLinkActive="true" routerLink="notifications">Notifications {{notifications.length}}</a>
       </li>
 
       <li *ngIf="loggedIn" class="nav-item">
-        <a class="nav-link" routerLinkActive="true" routerLink="messages">Messages</a>
+        <a class="nav-link" routerLinkActive="true" routerLink="messages">Messages {{unreadMessageCount}}</a>
       </li>
 
       <li *ngIf="loggedIn" (click)="logout()" class="nav-item">
         <a class="nav-link" routerLinkActive="true" routerLink="#" >Logout</a>
       </li>
-      <li *ngIf="notifications" (click)="logout()" class="nav-item">
-        <a class="nav-link" routerLinkActive="true" routerLink="#" >{{notifications.length}}</a>
-      </li>
+     
     </ul>
     <form class="form-inline my-2 my-lg-0">
       <input class="form-control mr-sm-2" type="text" placeholder="Search">

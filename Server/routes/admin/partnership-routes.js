@@ -11,7 +11,7 @@ const PartnershipRrequest = require('mongoose').model('PartnershipRequest');
 
 
 router.get('/partnership/requests', async (req, res) => {
-    PartnershipRrequest.find().populate('company', '_id companyName companyLocation companyInformation email ').then(requests => {
+    PartnershipRrequest.find().populate('company', '_id companyName companyLocation companyInformation email logoUmageUrl').then(requests => {
         res.status(200).json({
             success: true,
             message: 'Recieved partnership requests',
@@ -116,5 +116,6 @@ router.post('/partnership/decline/:id', async (req, res) => {
         })
     })
 
+})
 
-    module.exports = router
+module.exports = router

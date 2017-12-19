@@ -32,8 +32,7 @@ export class AutorizationService {
 
 
     login(userData): Observable<any> {
-        this.socketService.connect(); 
-        this.socketService.sendUserEmail(userData.email);
+        this.socketService.connect(userData.email);
         return this.http.post<any>(environment.apiBaseUrl + login, userData, {
             headers: {
                 'Contet-Type': 'application/json'

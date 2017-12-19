@@ -1,7 +1,7 @@
 module.exports = {
     development: {
         port: process.env.PORT || 3000,
-        dbPath: ''
+        dbPath: 'mongodb://localhost:27017/honeyMarketDb'
     },
     production: {}
 };

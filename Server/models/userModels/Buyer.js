@@ -7,9 +7,10 @@ const buyerSchema = new mongoose.Schema({
     companyLocation:  {country: String, city: String} ,
     companyInformation: {type: mongoose.Schema.Types.String, required: true },
     email: { type: mongoose.Schema.Types.String, required: true, unique: true },
+    //TODO: upload
+    logoImageUrl : {type: String},
     hashedPass: { type: mongoose.Schema.Types.String, required: true },
     salt: { type: mongoose.Schema.Types.String, required: true },
-    //role: [ { type: mongoose.Schema.Types.String} ]
 });
 
 buyerSchema.method({

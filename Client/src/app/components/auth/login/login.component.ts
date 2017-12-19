@@ -33,6 +33,7 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.model).subscribe(data => {
         this.cookieService.put('token', data.token);
         this.cookieService.put('userEmail', data.user.email);
+        this.cookieService.put('userRole', data.user.role);
         this.headerService.updateLoggedin(true);
         this.router.navigateByUrl('/home');
     }
