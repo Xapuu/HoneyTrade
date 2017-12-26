@@ -4,6 +4,8 @@ const userRoutes = require('./user-routes');
 const partnershipRoutes = require('./partnership-routes');
 const honeyRoutes = require('./honey-routes');
 const reviewRoutes = require('./review-routes');
+const orderRoutes = require('./order-routes');
+
 
 
 
@@ -13,5 +15,6 @@ module.exports = [
     userRoutes,
     partnershipRoutes,
     honeyRoutes,
-    reviewRoutes
+    reviewRoutes,
+    orderRoutes
 ]

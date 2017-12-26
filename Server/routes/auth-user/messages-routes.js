@@ -20,21 +20,21 @@ router.post('/message/send', async (req, res) => {
         })
     }
 
-    let reciever = await UserRole.findOne({ email: req.body.recieverEmail });
+    // let reciever = await UserRole.findOne({ email: req.body.recieverEmail });
     
-    if (!reciever) {
-       return res.status(404).json({
-            success: false,
-            message: 'Could not find reciever',
-        })
-    }
+    // if (!reciever) {
+    //    return res.status(404).json({
+    //         success: false,
+    //         message: 'Could not find reciever',
+    //     })
+    // }
     let messageForm = req.body;
 
 
-    if (!messageForm || !messageForm.recieverEmail || typeof messageForm.recieverEmail !== 'string' || messageForm.recieverEmail.trim().length <= 0 || messageForm.recieverEmail.match(emailPattern) == null) {
-        isFormValid = false
-        errors.email = 'Please provide a correct reciever email address.'
-    }
+    // if (!messageForm || !messageForm.recieverEmail || typeof messageForm.recieverEmail !== 'string' || messageForm.recieverEmail.trim().length <= 0 || messageForm.recieverEmail.match(emailPattern) == null) {
+    //     isFormValid = false
+    //     errors.email = 'Please provide a correct reciever email address.'
+    // }
 
     if (!messageForm || !messageForm.text ||  typeof messageForm.text !== 'string' || messageForm.text.trim().length <= 0) {
         
@@ -56,19 +56,19 @@ router.post('/message/send', async (req, res) => {
 
     Message.create({
         senderEmail: req.user.email,
-        recieverEmail: req.body.recieverEmail,
+        recieverEmail: 'admin@honeymarket.com',
         text: req.body.text,
         date: date,
         isRead: false
     }).then(m => {
-        Message.find({ recieverEmail: reciever.email }).then(messages => {
+        Message.find({ recieverEmail: 'admin@honeymarket.com' }).then(messages => {
             const io = require('../../index');
             
             messages = messages.filter(m => m.isRead === false);
         
             for (let socketId in io.sockets.sockets) {
                
-                if (io.sockets.sockets[socketId].userEmail === reciever.email) {                    
+                if (io.sockets.sockets[socketId].userEmail === 'admin@honeymarket.com') {                    
                     io.sockets.sockets[socketId].emit('unreadMessageCount', messages.length); 
                     break;
                 }
