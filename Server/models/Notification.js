@@ -4,7 +4,7 @@ const notificationSchema = new mongoose.Schema({
     recieverEmail: { type: mongoose.Schema.Types.String, required: true },
     title: { type: mongoose.Schema.Types.String, required: true },
     text: { type: mongoose.Schema.Types.String, required: true }, 
-    date: {type: String},  
+    date: {type: mongoose.Schema.Types.Date, required: true},  
     isRead: { type: mongoose.Schema.Types.Boolean, required: true }
 });
 

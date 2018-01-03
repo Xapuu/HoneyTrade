@@ -2,6 +2,9 @@ const express = require('express')
 
 const router = new express.Router()
 const Honey = require('mongoose').model('Honey');
+const Subscription = require('mongoose').model('Subscription');
+const Notification = require('mongoose').model('Notification');
+
 
 
 
@@ -34,12 +37,39 @@ router.post('/honey/create', async (req, res) => {
         price: reqHoney.price
     });
 
+    Subscription.find({ subscribedTo: 'honey new' }).then(async function (subs) {n
+        for (let sub of subs) {
+            let not =  await Notification.create({
+                recieverEmail: sub.subscriberEmail,
+                title: 'New Honey',
+                text: 'We are buying new honey - ' + honey.type,
+                date: new Date(),
+                isRead: false
+            })
 
-    return res.status(200).json({
-        success: true,
-        message: 'Created new honey',
-        honey: honey
+            await Notification.find({ recieverEmail: sub.subscriberEmail }).then(nots => {
+                const io = require('../../index');
+
+                for (let socketId in io.sockets.sockets) {
+                    if (io.sockets.sockets[socketId].userEmail === sub.subscriberEmai) {
+                        io.sockets.sockets[socketId].emit('notifications', nots);
+                        break;
+                    }
+                }
+                return res.status(200).json({
+                    success: true,
+                    message: 'Created new honey',
+                    honey: honey
+                })
+            })
+        }
+    }).catch(e => {
+        return res.status(404).json({
+            success: false,
+            message: 'Honey could not be found'
+        })
     })
+    
 })
 
 router.put('/honey/:id/update', async (req, res) => {
@@ -61,10 +91,10 @@ router.put('/honey/:id/update', async (req, res) => {
         let reqHoney = req.body.honey;
 
 
-        if (!reqHoney || typeof reqHoney.type !== 'string' || reqHoney.type.trim().length <= 1) {
-            isValid = false;
-            errors.type = 'Honey type must be longer';
-        }
+        // if (!reqHoney || typeof reqHoney.type !== 'string' || reqHoney.type.trim().length <= 1) {
+        //     isValid = false;
+        //     errors.type = 'Honey type must be longer';
+        // }
 
         if (!reqHoney || typeof reqHoney.price !== 'number' || reqHoney.price <= 0) {
             isValid = false;
@@ -79,11 +109,39 @@ router.put('/honey/:id/update', async (req, res) => {
             })
         }
 
-        honey.type = reqHoney.type;
+        //honey.type = reqHoney.type;
         honey.price = reqHoney.price;
        
 
         honey.save().then(h => {
+            Subscription.find({ subscribedTo: 'honey ' + honey._id }).then(async function (subs) {                
+                for (let sub of subs) {                    
+                    let not =  await Notification.create({
+                        recieverEmail: sub.subscriberEmail,
+                        title: 'New Honey price',
+                        text: honey.type + ' is now ' + honey.price,
+                        date: new Date(),
+                        isRead: false
+                    })
+        
+                    await Notification.find({ recieverEmail: sub.subscriberEmail }).then(nots => {
+                       
+                        const io = require('../../index');
+        
+                        for (let socketId in io.sockets.sockets) {
+                            if (io.sockets.sockets[socketId].userEmail === sub.subscriberEmai) {
+                                io.sockets.sockets[socketId].emit('notifications', nots);
+                                break;
+                            }
+                        }
+                    })
+                }
+            }).catch(e => {
+                return res.status(404).json({
+                    success: false,
+                    message: 'Honey could not be found'
+                })
+            })
             return res.status(200).json({
                 success: true,
                 message: 'Updated honey',
@@ -103,10 +161,37 @@ router.delete('/honey/:id', async (req, res) => {
     let id = req.params.id;
 
     Honey.findByIdAndRemove(id).then(e => {
-        
+        Subscription.find({ subscribedTo: 'honey ' + honey._id }).then(async function (subs) {                
+            for (let sub of subs) {                    
+                let not =  await Notification.create({
+                    recieverEmail: sub.subscriberEmail,
+                    title: 'Honey deleted',
+                    text: 'We are not buing ' + honey.type + ' anymore',
+                    date: new Date(),
+                    isRead: false
+                })
+    
+                await Notification.find({ recieverEmail: sub.subscriberEmail }).then(nots => {
+                   
+                    const io = require('../../index');
+    
+                    for (let socketId in io.sockets.sockets) {
+                        if (io.sockets.sockets[socketId].userEmail === sub.subscriberEmai) {
+                            io.sockets.sockets[socketId].emit('notifications', nots);
+                            break;
+                        }
+                    }
+                })
+            }
+        }).catch(e => {
+            return res.status(404).json({
+                success: false,
+                message: 'Honey could not be found'
+            })
+        })
         return res.status(200).json({
             success: true,
-            message: 'Deleted product'
+            message: 'Deleted honey'
         })
     }).catch(e => {
         return res.status(404).json({

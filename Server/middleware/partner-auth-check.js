@@ -37,7 +37,7 @@ module.exports = (req, res, next) => {
     
             const userEmail = decoded.sub
     
-            Partner.findOne({ companyEmail: userEmail }).then(user => {
+            Partner.findOne({ companyEmail: userEmail }).populate('company').then(user => {
     
                 if (!user) {
                     return res.status(401).json({
