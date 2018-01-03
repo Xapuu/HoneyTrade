@@ -161,12 +161,12 @@ router.delete('/honey/:id', async (req, res) => {
     let id = req.params.id;
 
     Honey.findByIdAndRemove(id).then(e => {
-        Subscription.find({ subscribedTo: 'honey ' + honey._id }).then(async function (subs) {                
+        Subscription.find({ subscribedTo: 'honey ' + e._id }).then(async function (subs) {                
             for (let sub of subs) {                    
                 let not =  await Notification.create({
                     recieverEmail: sub.subscriberEmail,
                     title: 'Honey deleted',
-                    text: 'We are not buing ' + honey.type + ' anymore',
+                    text: 'We are not buing ' + e.type + ' anymore',
                     date: new Date(),
                     isRead: false
                 })

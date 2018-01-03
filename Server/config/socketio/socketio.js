@@ -23,6 +23,7 @@ module.exports =  (server) => {
                     socket.emit('subscriptions', subs);
                 })
             }).catch(e => { })
+            
             socket.on('disconnect', () => {
                 console.log(`Deleting socket: ${socket.id}`);
             });

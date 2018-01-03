@@ -7,8 +7,6 @@ const Partner = require('mongoose').model('Partner');
 const Product = require('mongoose').model('Product');
 
 router.post('/subscribe/new/product', async (req, res) => {
- 
-    
         Subscription.create({
             subscriberEmail: req.user.email,
             subscribedTo: 'product new'
