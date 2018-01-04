@@ -30,6 +30,7 @@ import { MessageService } from './services/message.service';
 
 import { CookieModule, CookieService } from 'ngx-cookie';
 import { AuthenticationModule } from './components/auth/auth.module';
+import { AdminModule } from './components/admin/admin.module';
 
 
 @NgModule({
@@ -45,7 +46,8 @@ import { AuthenticationModule } from './components/auth/auth.module';
     SharedModule,
     ReactiveFormsModule,
     CookieModule.forRoot(),
-    AuthenticationModule
+    AuthenticationModule,
+    AdminModule
   ],
   providers: [
     NotificationService,

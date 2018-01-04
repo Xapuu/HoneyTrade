@@ -36,7 +36,6 @@ export class SocketService {
       })
 
       this.socket.on('unreadMessageCount', count => {
-        console.log(count)
         this.messageService.updateUnreadMessageCount(count);
       })
       return () => {

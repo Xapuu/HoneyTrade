@@ -18,6 +18,7 @@ export class HeaderComponent implements OnInit {
   public notifications: Notification[];
   public loggedIn: boolean;
   public unreadMessageCount: number;
+  private isAdmin: boolean
   constructor(
     private notificationService: NotificationService,
     private messageService: MessageService,
@@ -35,22 +36,34 @@ export class HeaderComponent implements OnInit {
     });
 
     this.headerService.loggedIn$.subscribe(data => this.loggedIn = data);
+    this.headerService.isAdmin$.subscribe(data => this.isAdmin = data);
   }
 
   ngOnInit() {
-    this.isLoggedIn();
     if(this.cookieService.get('token')){
       this.socketService.connect(this.cookieService.get('userEmail'));
     }
+    this.isLoggedIn();
+    console.log(this.isAdmin)
   }
 
   isLoggedIn(): void {
     if (this.cookieService.get('token')) {
       this.loggedIn = true;
+      this.isAdminLogged();
     } else {
       this.loggedIn = false;
     }
 
+  }
+
+  isAdminLogged(): void{
+    if (this.cookieService.get('userRole') === 'admin') {
+      this.isAdmin = true;
+      this.router.navigateByUrl('/admin');
+    } else {
+      this.isAdmin = false;
+    }
   }
 
   // setNotifications(){
@@ -63,6 +76,7 @@ export class HeaderComponent implements OnInit {
   logout() {
     this.cookieService.removeAll();
     this.loggedIn = false;
+    this.isAdmin = false;
     this.socketService.disconnect();
     this.router.navigateByUrl('/home');
   }

@@ -35,7 +35,12 @@ export class LoginComponent implements OnInit {
         this.cookieService.put('userEmail', data.user.email);
         this.cookieService.put('userRole', data.user.role);
         this.headerService.updateLoggedin(true);
-        this.router.navigateByUrl('/home');
+        if(this.cookieService.get('userRole') === 'admin'){
+          this.headerService.updateisAdmin(true);
+          this.router.navigateByUrl('/admin');
+        }else{
+          this.router.navigateByUrl('/home');
+        }
     }
     );
 

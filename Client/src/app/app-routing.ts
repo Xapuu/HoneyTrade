@@ -9,9 +9,13 @@ import { ErrorComponent } from './components/error/error.component';
 import { NotFoundComponent } from './components/shared/not-found/not-found.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: '',component: HomeComponent, pathMatch: 'full' },
+
   { path: 'home', component: HomeComponent },
+
   { path: 'auth', loadChildren: './components/auth/auth.module#AuthenticationModule'},
+
+  { path: 'admin', loadChildren: './components/admin/admin.module#AdminModule'},  
   
   { path: 'error', component: ErrorComponent },
 
