@@ -45,9 +45,7 @@ import { AdminModule } from './components/admin/admin.module';
     HttpClientModule,
     SharedModule,
     ReactiveFormsModule,
-    CookieModule.forRoot(),
-    AuthenticationModule,
-    AdminModule
+    CookieModule.forRoot()
   ],
   providers: [
     NotificationService,
